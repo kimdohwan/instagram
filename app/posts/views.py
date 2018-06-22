@@ -1,9 +1,25 @@
-from django.http import HttpResponse
-from django.shortcuts import render
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect
 
 # Create your views here.
+from .models import Post
+
+
 def post_list(request):
-    return HttpResponse('포스트 리스트 페이지')
+    posts = Post.objects.all()
+    context = {
+        'posts': posts,
+    }
+    return render(request, 'posts/post_list.html', context)
+
 
 def post_detail(request, pk):
-    return HttpResponse(f'포스트 디테일 페이지 pk: {pk}')
+    post = Post.objects.get(pk=pk)
+    context = {
+        'post': post,
+    }
+    return render(request, 'posts/post_detail.html', context)
+
+
+def index(request):
+    return redirect('posts:post-list')
