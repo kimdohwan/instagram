@@ -20,6 +20,3 @@ def post_detail(request, pk):
     }
     return render(request, 'posts/post_detail.html', context)
 
-
-def index(request):
-    return redirect('posts:post-list')

@@ -1,6 +1,6 @@
 from django.urls import path
 
-from posts import views
+from . import views
 # from posts.views import post_list, post_detail
 
 app_name = 'posts'
