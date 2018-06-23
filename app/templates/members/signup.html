@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Sign Up Page</h2>
+<form action="" method="POST">
+    {% csrf_token %}
+    <div>
+        id :
+        <input type="text" name="username" value="{{ input_id }}">
+    </div>
+    <div>
+        password :
+        <input type="password" name="password" value="{{ input_pw}}">
+    </div>
+    <div>
+        confirm password :
+        <input type="password" name="confirm_pw">
+        {{ wrong_pw_message }}
+    </div>
+    <button type="submit">Sign up</button>
+</form>
+{% endblock %}

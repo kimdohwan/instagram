@@ -1,12 +1,16 @@
 {% extends 'base.html' %}
 
 {% block content%}
-    <h1>Post List</h1>
-    {% for post in posts %}
-    <!--<div>{{ post.author.username }}</div>-->
-    <div>Who is: {{ post.content }}</div>
-    <div>
-        <img width="100%" src="{{ post.photo.url }}" alt="">
-    </div>
-    {% endfor %}
+<h1>Post List</h1>
+{% for post in posts %}
+<!--<div>{{ post.author.username }}</div>-->
+<div>
+    <p>[No.{{ post.pk }}] {{ post.created_at }} Uploaded by {{ post.author.username }}</p>
+    <p>{{ post.content }}</p>
+</div>
+<div>
+    <img width="100%" src="{{ post.photo.url }}" alt="">
+</div>
+<hr>
+{% endfor %}
 {% endblock %}
