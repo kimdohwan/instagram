@@ -38,7 +38,6 @@ def sign_up(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
-        confirm_pw = request.POST['confirm_pw']
         # if password != confirm_pw:
         #     context = {
         #         'wrong_pw_message': 'Error: not matched password',
@@ -58,21 +57,28 @@ def sign_up(request):
         #         'username_list': [i.username for i in User.objects.all()],
         #     }
         #     return render(request, 'members/signup.html', context)
+
+        # 정보 입력 오류 에러에 사용되는 변수: confirm_pw, username_list
+        confirm_pw = request.POST['confirm_pw']
+        username_list = [u.username for u in User.objects.all()]
+        # 잘못된 정보 입력 시 에러메시지 출력 하기 위한 컨텍스트
         if password != confirm_pw or\
                 not username or\
-                username in [u.username for u in User.objects.all()] or \
+                username in username_list or \
                 not password:
             context = {
-                'wrong_pw_message': 'Error: not matched password',
                 'input_id': username,
                 'input_pw': password,
                 'input_cpw': confirm_pw,
+                'username_list': username_list,
+                'existed_username_message': 'Error: existed ID',
+                'wrong_pw_message': 'Error: not matched password',
                 'no_name_message': 'Error: plz input ID',
-                'existed_username': 'Error: existed ID',
-                'username_list': [i.username for i in User.objects.all()],
                 'no_password_message': 'Error: plz input PW'
             }
             return render(request, 'members/signup.html', context)
+
+        # 새로운 유져 생성 및 인증,로그인
         else:
             User.objects.create_user(
                 username=username,
