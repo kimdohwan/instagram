@@ -84,6 +84,7 @@ def sign_up(request):
                 username=username,
                 password=password,
             )
+        # 잘 생성 되었는지 확인 및 로그인을 위한 함수: authenticate(), is_authenticated
         new_user = authenticate(request, username=username, password=password)
         login(request, new_user)
         return redirect('posts:post-list')
