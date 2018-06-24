@@ -4,17 +4,30 @@
 <form action="" method="POST">
     {% csrf_token %}
     <div>
-        id :
-        <input type="text" name="username" value="{{ input_id }}">
+        <input type="text" name="username" value="{{ input_id }}" placeholder="ID">
+        {% if not input_id %}
+        {{ no_name_message }}
+        {% else %}
+        {% endif %}
+
+        {% if input_id in username_list %}
+        {{ existed_username }}
+        {% else %}
+        {% endif %}
     </div>
     <div>
-        password :
-        <input type="password" name="password" value="{{ input_pw}}">
+        <input type="password" name="password" value="{{ input_pw }}" placeholder="PASSWORD">
+        {% if not input_pw%}
+        {{ no_password_message }}
+        {% else %}
+        {% endif %}
     </div>
     <div>
-        confirm password :
-        <input type="password" name="confirm_pw">
+        <input type="password" name="confirm_pw" value="{{ input_cpw }}" placeholder="CONFIRM PASSWORD">
+        {% if input_pw != input_cpw %}
         {{ wrong_pw_message }}
+        {% else %}
+        {% endif %}
     </div>
     <button type="submit">Sign up</button>
 </form>
