@@ -16,7 +16,10 @@ def login_view(request):
             login(request, user)
             return redirect('posts:post-list')
         else:
-            return redirect('members:login')
+            context={
+                'wrong_input': "Error: Can't sign in"
+            }
+            return render(request, 'members/login.html', context)
     else:
         return render(request, 'members/login.html')
 
