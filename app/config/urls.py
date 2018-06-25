@@ -23,7 +23,7 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('posts/', include('posts.urls')),
-    path('', views.index),
+    path('', views.index, name='index'),
     path('members/', include('members.urls')),
 ] + static(
     prefix=settings.MEDIA_URL,
