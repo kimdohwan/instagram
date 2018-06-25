@@ -40,8 +40,19 @@ class SignupForm(forms.Form):
     def clean_username(self):
         data = self.cleaned_data['username']
         if User.objects.filter(username=data).exists():
-            print(f'존재하는 유져 {locals()}, {data}')
-            raise forms.ValidationError('무조건 에러')
-            # return HttpResponse('존재하는 유져입니다')
-        print(locals())
+            raise forms.ValidationError('유져ID 이미존재')
         return data
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = self.cleaned_data['password']
+        password2 = self.cleaned_data['password2']
+        print(cleaned_data)
+        print(password)
+        print(password2)
+
+        if password != password2:
+            print('패스워드 같지 않음')
+
+
+            raise forms.ValidationError('비밀번호 불일치')

@@ -37,12 +37,18 @@ def signup(request):
         context = {
             'errors': [],
         }
-        if form.is_valid:
+        # form.is_valid()를 통과하지 못한 경우,
+        #  유효성 검증을 통과하지 못한 내용은 form.<field>.errors에 정의됨 -> form을 순회하면 form.<field>를 하나씩 순회
+        #  (통과하지 못한 경우의 'form'변수를 디버깅을 이용해 확인해본다)
+
+        # 1. form.is_valid()를 통과하지 못했을 경우, 해당 내용을 template에 출력하도록 구현
+        # 2. SignupForm의 clean()메서드를 재정의하고, password와 password2를 비교해서 유효성을 검증하도록 구현
+        if form.is_valid():
             # cleaned_data는 유효성 검사를 성공 햇을 때 사용하는 데이터
-            username = form.data['username']
-            email = form.data['email']
-            password = form.data['password']
-            password2 = form.data['password2']
+            username = form.cleaned_data['username']
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            password2 = form.cleaned_data['password2']
 
             user = User.objects.create_user(
                 username=username,
