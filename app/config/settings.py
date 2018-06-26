@@ -28,8 +28,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# 커스텀 유져 모델
 AUTH_USER_MODEL = 'members.User'
-print(AUTH_USER_MODEL)
+
 
 
 
