@@ -17,7 +17,6 @@ class SignupForm(forms.Form):
         widget=forms.TextInput(
             attrs={
                 'class': 'form-control',
-                'placeholder': '이메일',
             }
         )
     )
@@ -25,7 +24,6 @@ class SignupForm(forms.Form):
         widget=forms.PasswordInput(
             attrs={
                 'class': 'form-control',
-                'placeholder': '비밀번호',
             }
         ),
     )
@@ -44,15 +42,24 @@ class SignupForm(forms.Form):
         return data
 
     def clean(self):
-        cleaned_data = super().clean()
+        super().clean()
         password = self.cleaned_data['password']
         password2 = self.cleaned_data['password2']
-        print(cleaned_data)
-        print(password)
-        print(password2)
 
         if password != password2:
-            print('패스워드 같지 않음')
+            self.add_error('password2', '비밀번호 불일치')
+        return self.cleaned_data
 
+    def signup(self):
+        # cleaned_data는 유효성 검사를 성공 햇을 때 사용하는 데이터
+        username = self.cleaned_data['username']
+        email = self.cleaned_data['email']
+        password = self.cleaned_data['password']
+        password2 = self.cleaned_data['password2']
 
-            raise forms.ValidationError('비밀번호 불일치')
+        user = User.objects.create_user(
+            username=username,
+            email=email,
+            password=password,
+        )
+        return user
