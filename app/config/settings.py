@@ -31,6 +31,9 @@ ALLOWED_HOSTS = []
 # 커스텀 유져 모델
 AUTH_USER_MODEL = 'members.User'
 
+# login_required decorator에서 redirect_field_name에서 참조한다
+LOGIN_URL = 'members:login'
+
 
 
 
@@ -89,8 +92,16 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        # instagram 이라는 postgreSQL 데이터베이스로 변경
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'instagram',
+        'USER': 'kimdohwan',
+        'PASSWORD': 'kim0203',
+        'HOST': 'localhost',
+        'PORT': '5432',
+
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 

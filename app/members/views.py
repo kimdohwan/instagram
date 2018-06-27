@@ -3,6 +3,7 @@ from django.contrib.auth import login, authenticate, get_user_model
 from django.contrib.auth.views import logout
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from .forms import SignupForm
 
 
 # Create your views here.
@@ -29,12 +30,12 @@ def logout_view(request):
         return redirect('members:login')
 
 
-from .forms import SignupForm
+User = get_user_model()
 
 
 def signup(request):
     if request.method == 'POST':
-        form = SignupForm(request.POST)
+        form = SignupForm(request.POST, request.FILES)
         if form.is_valid():
             user = form.signup()
             login(request, user)
@@ -47,6 +48,44 @@ def signup(request):
     }
     return render(request, 'members/signup.html', context)
 
+
+def profile(request, author):
+    author = User.objects.get(username=author)
+    login_user = request.user
+    if login_user == author:
+        return render(request, 'members/profile.html')
+    else:
+        context = {
+            'author': author,
+        }
+        return render(request, 'members/profile.html', context)
+
+
+def withraw(request, pk):
+    if request.method == 'POST':
+        user = User.objects.get(pk=pk)
+        user.delete()
+        print(User.objects.all())
+        return redirect('posts:post-list')
+    else:
+        return HttpResponse('withraw')
+
+
+# -
+# -
+# -
+# -
+# -
+# -
+# -
+# -
+# -
+# -
+# -
+# -
+# -
+# -
+# -
 
 # 유져 클래스 자체를 가져올 때 get_user_model()
 # foreign키에 user모델을 저장할 때는 settings.AUTH_USER_MODEL
@@ -105,6 +144,3 @@ def signup_bak(request):
             login(request, user)
             return redirect('index')
     return render(request, 'members/signup_bak.html', context)
-
-
-User = get_user_model()
