@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 from django.http import request
 
-from .models import Post
+from .models import Post, PostComment
 
 User = get_user_model()
 
@@ -17,6 +17,15 @@ class PostModelForm(ModelForm):
             'content',
             'photo',
         ]
+
+
+class PostCommentModelForm(ModelForm):
+    class Meta:
+        model = PostComment
+        fields = (
+            # author,
+            'content',
+        )
 
 
 class CreateForm(forms.Form):

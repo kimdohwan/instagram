@@ -28,5 +28,32 @@
 <div>
     <img width="75%%" src="{{ post.photo.url }}" alt="">
 </div>
+<div>
+    {% for comment in comments %}
+    {% if post.id == comment.post_id %}
+    <div>
+        --- {{ comment.content }}
+            {% if comment.author.img_profile %}
+            <img style="width: 40px;" class="rounded-circle" src="{{ comment.author.img_profile.url }}"
+                 alt="">
+            {% else %}
+            {% load static %}
+            <img style="width: 40px;" class="rounded-circle" src="{% static 'images/blank_user.png' %}"
+                 alt="">
+            {% endif %}
+            <a href="{% url 'members:profile' comment.author %}">{{ comment.author }}</a>
+            {{ comment.created_at|time:"H:i" }} {{ comment.created_at|date:"D d m y" }}
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
+<form action="{% url 'posts:post-comment' post.id %}" method="POST">
+    {% csrf_token %}
+    {% for field in form %}
+    {{ field }}
+    {% endfor %}
+
+    <button type="submit">댓글달기</button>
+</form>
 {% endfor %}
 {% endblock %}

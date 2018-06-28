@@ -7,16 +7,20 @@ from django.shortcuts import render, redirect, get_object_or_404
 # Create your views here.
 from django.views.decorators.http import require_POST
 
-from .form import CreateForm, PostModelForm
-from .models import Post
+from .form import CreateForm, PostModelForm, PostCommentModelForm
+from .models import Post, PostComment
 
 User = get_user_model()
 
 
 def post_list(request):
     posts = Post.objects.all()
+    comments = PostComment.objects.all()
+    form = PostCommentModelForm()
     context = {
         'posts': posts,
+        'comments': comments,
+        'form': form,
     }
     return render(request, 'posts/post_list.html', context)
 
@@ -28,7 +32,7 @@ def post_detail(request, pk):
     }
     return render(request, 'posts/post_detail.html', context)
 
-
+@login_required
 def post_create(request):
     if request.method == 'POST':
         form = PostModelForm(request.POST, request.FILES)
@@ -44,6 +48,47 @@ def post_create(request):
         'form': form
     }
     return render(request, 'posts/post_create.html', context)
+
+
+@login_required
+@require_POST
+def post_delete(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    if post.author != request.user:
+        raise PermissionDenied('지울 권한 없습니다')
+    post.delete()
+    return redirect('posts:post-list')
+
+@require_POST
+@login_required
+def post_comment(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    form = PostCommentModelForm(request.POST)
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.author = request.user
+        comment.post = post
+        comment.save()
+    return redirect('posts:post-list')
+
+
+
+@login_required
+def post_comment_bak(request, pk):
+    if request.method == 'POST':
+        post = Post.objects.get(pk=pk)
+        author = request.user
+        content = request.POST['content']
+
+        PostComment.objects.create(
+            post=post,
+            author=author,
+            content=content,
+        )
+    return redirect('posts:post-list')
+
+
+# -------------------------------------------------------------
 
 
 @login_required
@@ -69,17 +114,6 @@ def post_create_with_form(request):
 #         return HttpResponse
 #     if request.user.is_authenticated:
 #         return
-
-
-
-@login_required
-@require_POST
-def post_delete(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    if post.author != request.user:
-        raise PermissionDenied('지울 권한 없습니다')
-    post.delete()
-    return redirect('posts:post-list')
 
 
 def my_post_delete(request, pk):
