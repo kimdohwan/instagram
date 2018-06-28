@@ -22,9 +22,6 @@
     <div>
         <a href="{% url 'members:profile' user %}">프로필 보기</a>
     </div>
-    <div>
-        <a href="{% url 'posts:post-create' %}">글쓰기</a>
-    </div>
     <form action="{% url 'members:logout' %}" method="POST">
         {% csrf_token %}
         <button type="submit">로그아웃</button>
@@ -40,6 +37,9 @@
         <a href="{% url 'members:login' %}">로그인</a>
     </div>
     {% endif %}
+    <div>
+        <a href="{% url 'posts:post-create' %}">글쓰기</a>
+    </div>
 </div>
 {% block content %}
 {% endblock %}

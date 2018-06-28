@@ -1,18 +1,20 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 # Create your views here.
-from .form import CreateForm
+from django.views.decorators.http import require_POST
+
+from .form import CreateForm, PostModelForm
 from .models import Post
 
-
-# User = get_user_model()
+User = get_user_model()
 
 
 def post_list(request):
-    posts = Post.objects.all().order_by('-id')
+    posts = Post.objects.all()
     context = {
         'posts': posts,
     }
@@ -27,8 +29,25 @@ def post_detail(request, pk):
     return render(request, 'posts/post_detail.html', context)
 
 
-@login_required()
 def post_create(request):
+    if request.method == 'POST':
+        form = PostModelForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.save()
+            return redirect('posts:post-list')
+    else:
+        form = PostModelForm()
+
+    context = {
+        'form': form
+    }
+    return render(request, 'posts/post_create.html', context)
+
+
+@login_required
+def post_create_with_form(request):
     if request.method == 'POST':
         form = CreateForm(request.POST, request.FILES)
         if form.is_valid():
@@ -44,7 +63,26 @@ def post_create(request):
     return render(request, 'posts/post_create.html', context)
 
 
+# def post_delete(request, pk):
+#     print(request.user.is_authenticated)
+#     if request.method == 'POST':
+#         return HttpResponse
+#     if request.user.is_authenticated:
+#         return
+
+
+
+@login_required
+@require_POST
 def post_delete(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    if post.author != request.user:
+        raise PermissionDenied('지울 권한 없습니다')
+    post.delete()
+    return redirect('posts:post-list')
+
+
+def my_post_delete(request, pk):
     if request.method == 'POST':
         post = Post.objects.get(pk=pk)
         if post.author == request.user:

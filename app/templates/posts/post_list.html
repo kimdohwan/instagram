@@ -3,8 +3,19 @@
 {% block content%}
 <h1>Post List</h1>
 {% for post in posts %}
-<div>Uploaded by <a href="{% url 'members:profile' post.author.username %}">{{ post.author.username }}</a></div>
-<div>post.content: {{ post.content }}</div>
+<hr>
+<div>
+    Uploaded by <a href="{% url 'members:profile' post.author.username %}">{{ post.author.username }}</a>
+    {% if post.author.img_profile %}
+    <img style="width: 40px;" class="rounded-circle float-left" src="{{ post.author.img_profile.url }}" alt="">
+    {% else %}
+    {% load static %}
+    <img style="width: 40px;" class="rounded-circle float-left" src="{% static 'images/blank_user.png' %}" alt="">
+    {% endif %}
+</div>
+<div>
+    내용 : {{ post.content }}
+</div>
 <div>
     <form action="{% url 'posts:post-delete' post.pk %}" method="POST">
         {% csrf_token %}

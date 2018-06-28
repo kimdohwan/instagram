@@ -38,14 +38,20 @@ class SignupForm(forms.Form):
         ),
     )
     introduce = forms.CharField(
-        widget=forms.TextInput(
+        label='소개',
+        widget=forms.Textarea(
             attrs={
                 'class': 'form-control',
             }
         ),
         required=False
     )
-    site = forms.CharField(
+    gender = forms.ChoiceField(
+        widget=forms.Select(),
+        choices=User.CHOICES_GENDER,
+    )
+    site = forms.URLField(
+        label='사이트 url',
         widget=forms.TextInput(
             attrs={
                 'class': 'form-control',
@@ -54,15 +60,6 @@ class SignupForm(forms.Form):
         required=False
     )
     img_profile = forms.ImageField()
-    CHOICES_GENDER = (
-        ('m', '남성'),
-        ('f', '여성'),
-        ('x', '선택안함'),
-    )
-    gender = forms.ChoiceField(
-        widget=forms.Select(),
-        choices=CHOICES_GENDER,
-    )
 
     def clean_username(self):
         data = self.cleaned_data['username']
@@ -80,25 +77,56 @@ class SignupForm(forms.Form):
         return self.cleaned_data
 
     def signup(self):
-        # cleaned_data는 유효성 검사를 성공 햇을 때 사용하는 데이터
-        username = self.cleaned_data['username']
-        email = self.cleaned_data['email']
-        password = self.cleaned_data['password']
-        introduce = self.cleaned_data['introduce']
-        site = self.cleaned_data['site']
-        img_profile = self.cleaned_data['img_profile']
-        gender = self.cleaned_data['gender']
+        fields = [
+            'username',
+            'email',
+            'password',
+            'gender',
+            'img_profile',
+            'introduce',
+            'site',
+        ]
+        create_user_dict={}
+        for key, value in self.cleaned_data.items():
+            if key in fields:
+                create_user_dict[key] = value
+        #
+        # create_user_dict = {key: value for key, value in self.cleaned_data.items() if key in fields}
+        #
+        # def in_fields(item):
+        #     return item[0] in fields
+        # result = filter(in_fields, self.cleaned_data.items())
+        # create_user_dict={}
+        # for item in result:
+        #     create_user_dict[item[0]] = item[1]
+        #
+        # create_user_dict = dict(filter(in_fields, self.cleaned_data.items()))
+        # create_user_dict = dict(filter(lambda item: item[0], self.cleaned_data.items()))
+        print(create_user_dict)
 
-        user = User.objects.create_user(
-            username=username,
-            email=email,
-            password=password,
-            introduce=introduce,
-            site=site,
-            img_profile=img_profile,
-            gender=gender,
-        )
+        user = User.objects.create_user(**create_user_dict)
         return user
+
+
+        # # cleaned_data는 유효성 검사를 성공 햇을 때 사용하는 데이터
+        # username = self.cleaned_data['username']
+        # email = self.cleaned_data['email']
+        # password = self.cleaned_data['password']
+        # introduce = self.cleaned_data['introduce']
+        # site = self.cleaned_data['site']
+        # img_profile = self.cleaned_data['img_profile']
+        # gender = self.cleaned_data['gender']
+        #
+        # user = User.objects.create_user(
+        #     username=username,
+        #     email=email,
+        #     password=password,
+        #     introduce=introduce,
+        #     site=site,
+        #     img_profile=img_profile,
+        #     gender=gender,
+        # )
+        # return user
 
 # 1. post_create구현
 #     사진 1장과 설명을 받음 (설명은 없어도 되나, 사진은 반드시 필요)

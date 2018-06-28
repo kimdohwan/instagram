@@ -1,11 +1,22 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
+from django.forms import ModelForm
 from django.http import request
 
 from .models import Post
 
 User = get_user_model()
+
+
+class PostModelForm(ModelForm):
+    class Meta:
+        model = Post
+        fields = [
+            # 'author',
+            'content',
+            'photo',
+        ]
 
 
 class CreateForm(forms.Form):

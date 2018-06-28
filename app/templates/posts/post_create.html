@@ -5,7 +5,7 @@
     {% for field in form %}
     <div>
         <label for="{{ field.id_for_type }}">
-            {{ field.name }}
+            {{ field.label }}
         </label>
         {{ field }}
         {{ field.errors }}
