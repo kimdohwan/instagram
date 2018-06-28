@@ -1,8 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
-{% if author %}
 <div>
+    {% if author == user %}
+    <h2>user 프로필 </h2>
+    {% else %}
     <h2>author 프로필</h2>
+    {% endif %}
     <div>아이디(author): {{ author }}</div>
     <div>pk값(user.id): {{ author.id }}</div>
     {% if author.img_profile %}
@@ -16,21 +19,4 @@
     <div>자기소개: {{ author.introduce }}</div>
     <div>이메일: {{ author.email }}</div>
 </div>
-{% else %}
-<div>
-    <h2>유져 프로필</h2>
-    <div>아이디(user): {{ user }}</div>
-    <div>pk값(user.id): {{ user.id }}</div>
-    {% if user.img_profile %}
-    <div>프로필 사진: <img width="20%" src="{{ user.img_profile.url }}" alt=""></div>
-    {% else %}
-    {% endif %}
-    {% if user.gender %}
-    <div>성별: {{ user.get_gender_display }}</div>
-    {% else %}
-    {% endif %}
-    <div>자기소개: {{ user.introduce }}</div>
-    <div>이메일: {{ user.email }}</div>
-</div>
-{% endif %}
 {% endblock %}

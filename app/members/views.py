@@ -60,14 +60,14 @@ def signup(request):
 
 def profile(request, author):
     author = User.objects.get(username=author)
-    login_user = request.user
-    if login_user == author:
-        return render(request, 'members/profile.html')
-    else:
-        context = {
-            'author': author,
-        }
-        return render(request, 'members/profile.html', context)
+    # login_user = request.user
+    # if login_user == author:
+    #     return render(request, 'members/profile.html')
+    # else:
+    context = {
+        'author': author,
+    }
+    return render(request, 'members/profile.html', context)
 
 
 def withraw(request, pk):
