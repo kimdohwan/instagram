@@ -80,6 +80,10 @@ def withraw(request, pk):
         return HttpResponse('withraw')
 
 
+def follow_toggle(request):
+    pass
+
+
 # -
 # -
 # -

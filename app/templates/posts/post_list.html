@@ -8,6 +8,12 @@
     Uploaded by <a href="{% url 'members:profile' post.author.username %}">{{ post.author.username }}</a>
     {% if post.author.img_profile %}
     <img style="width: 40px;" class="rounded-circle float-left" src="{{ post.author.img_profile.url }}" alt="">
+    <div>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <button type="submit"> + follow</button>
+        </form>
+    </div>
     {% else %}
     {% load static %}
     <img style="width: 40px;" class="rounded-circle float-left" src="{% static 'images/blank_user.png' %}" alt="">

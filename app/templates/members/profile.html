@@ -1,11 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 <div>
-    {% if author == user %}
-    <h2>user 프로필 </h2>
-    {% else %}
-    <h2>author 프로필</h2>
-    {% endif %}
+    <h2>user 프로필</h2>
 
     <div>아이디(author): {{ author }}</div>
 
