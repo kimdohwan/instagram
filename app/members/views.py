@@ -73,6 +73,7 @@ def profile(request, author):
 def withraw(request, pk):
     if request.method == 'POST':
         user = User.objects.get(pk=pk)
+        print(User.objects.all())
         user.delete()
         print(User.objects.all())
         return redirect('posts:post-list')
@@ -81,6 +82,7 @@ def withraw(request, pk):
 
 
 def follow_toggle(request):
+    수업 진행 중 끝
     pass
 
 
