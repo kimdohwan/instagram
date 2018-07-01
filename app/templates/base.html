@@ -26,6 +26,7 @@
         {% csrf_token %}
         <button type="submit">로그아웃</button>
     </form>
+    <a href="{% url 'members:talk' %}">메세지</a>
     <hr>
     <form action="{% url 'members:withraw' user.pk %}" method="POST">
         {% csrf_token %}

@@ -1,0 +1,11 @@
+{% extends 'base.html'%}
+{% block content %}
+받은 메시지
+{% for message in messages %}
+<div>
+    {{message.who_send }}: {{ message.text }}
+</div>
+{% endfor %}
+
+
+{% endblock %}

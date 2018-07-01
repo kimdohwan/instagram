@@ -1,9 +1,14 @@
 from django import forms
 from django.contrib.auth import login, authenticate, get_user_model
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import logout
+from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from .forms import SignupForm
+from django.views.decorators.http import require_POST
+
+from .models import Message
+from .forms import SignupForm, TalkForm
 
 
 # Create your views here.
@@ -82,7 +87,7 @@ def withraw(request, pk):
 
 
 def follow_toggle(request):
-    수업 진행 중 끝
+    # 수업 진행 중 끝난 부분
     pass
 
 
@@ -159,3 +164,53 @@ def signup_bak(request):
             login(request, user)
             return redirect('index')
     return render(request, 'members/signup_bak.html', context)
+
+def talk(request):
+    u1 = request.user
+    form = TalkForm()
+    messages = Message.objects.filter(who_receive=u1)
+    context = {
+        'form': form,
+        'messages': messages,
+    }
+    return render(request, 'members/talk.html', context)
+
+def talk_detail(request):
+    return render(request, 'members/talkdetail.html')
+
+@login_required
+def talk_bak(request):
+    if request.method == 'POST':
+        u1 = request.user
+        text = request.POST['text']
+        u2 = User.objects.get(username=request.POST['u2'])
+        u1.send.create(who_send=u1,
+                       who_receive=u2,
+                       text=text)
+        messages = Message.objects.filter(
+            Q(
+                who_send__username=u1,
+                who_receive__username=u2,
+            )
+            |
+            Q(
+                who_send__username=u2,
+                who_receive__username=u1,
+            )
+        ).order_by('time')
+        form = TalkForm()
+        context = {
+            'form': form,
+            'messages': messages,
+        }
+        print(messages)
+        return render(request, 'members/talk.html', context)
+    else:
+        u1 = request.user
+        form = TalkForm()
+        messages = Message.objects.filter(who_receive=u1)
+        context = {
+            'form': form,
+            'messages': messages,
+        }
+        return render(request, 'members/talk.html', context)

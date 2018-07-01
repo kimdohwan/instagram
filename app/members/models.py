@@ -1,7 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-
 # Create your models here.
 from members.exceptions import RelationNotExist, DuplicateRelationException
 
@@ -54,8 +53,6 @@ class User(AbstractUser):
                 to_user=to_user,
                 relation_type='Follow'
             )
-
-
 
     @property
     def following(self):
@@ -145,3 +142,23 @@ class Relation(models.Model):
             to_user=self.to_user.username,
             type=self.get_relation_type_display(),
         )
+
+
+class Message(models.Model):
+    who_send = models.ForeignKey(
+        User,
+        models.CASCADE,
+        related_name='send',
+    )
+    who_receive = models.ForeignKey(
+        User,
+        models.CASCADE,
+        related_name='receive',
+    )
+    text = models.TextField(
+        blank=True
+    )
+    time = models.TimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'<{self.who_send}> 님이 <{self.who_receive}> 님께 <{self.text}> 전송 '

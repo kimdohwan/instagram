@@ -4,7 +4,27 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.http import HttpResponse
 
+from members.models import Message
+
 User = get_user_model()
+
+CHOICES_USER = [(i, i.username) for i in User.objects.all()]
+
+
+class TalkForm(forms.Form):
+    u2 = forms.ChoiceField(
+        label='유져선택',
+        widget=forms.Select(),
+        choices=CHOICES_USER,
+    )
+    text = forms.CharField(
+        label='입력',
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+            }
+        ),
+    )
 
 
 class SignupForm(forms.Form):
@@ -86,7 +106,7 @@ class SignupForm(forms.Form):
             'introduce',
             'site',
         ]
-        create_user_dict={}
+        create_user_dict = {}
         for key, value in self.cleaned_data.items():
             if key in fields:
                 create_user_dict[key] = value
@@ -106,7 +126,6 @@ class SignupForm(forms.Form):
 
         user = User.objects.create_user(**create_user_dict)
         return user
-
 
         # # cleaned_data는 유효성 검사를 성공 햇을 때 사용하는 데이터
         # username = self.cleaned_data['username']
