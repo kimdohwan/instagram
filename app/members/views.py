@@ -1,8 +1,13 @@
+import json
+
+import requests
 from django import forms
-from django.contrib.auth import login, authenticate, get_user_model
+from django.contrib.auth import authenticate, get_user_model, login
 from django.contrib.auth.views import logout
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+
+from config import settings
 from .forms import SignupForm
 
 
@@ -86,7 +91,65 @@ def follow_toggle(request):
     pass
 
 
-# -
+def facebook_login(request):
+    code = request.GET.get('code')
+    url = 'https://graph.facebook.com/v3.0/oauth/access_token'
+    params = {
+        'client_id': settings.FACEBOOK_APP_ID,
+        'redirect_uri': 'http://localhost:8000/members/facebook-login/',
+        'client_secret': settings.FACEBOOK_APP_SECRET_CODE,
+        'code': code,
+    }
+    response = requests.get(url, params)
+    # response_dict = json.loads(response.text)
+    # 위와 같은 결과를 가지는 간략한 방법
+    response_dict = response.json()
+    access_token = response_dict['access_token']
+    # r = requests.get(
+    #     f'https://graph.facebook.com/v3.0/oauth/access_token?'
+    #     f'client_id={app_id}'
+    #     f'&redirect_uri={redirect_uri}'
+    #     f'&client_secret={app_secret}&code={code}')
+    url = 'https://graph.facebook.com/debug_token'
+    # app_id = '492405001181867'
+    # app_secret = '10519585f22211c4a3c762b8320973d2'
+    params = {
+        'input_token': access_token,
+        'access_token': f'{settings.FACEBOOK_APP_ID}|{settings.FACEBOOK_APP_SECRET_CODE}',
+    }
+    response = requests.get(url, params)
+
+    url = 'https://graph.facebook.com/v3.0/me'
+    params = {
+        'fields': ','.join([
+            'id',
+            'name',
+            'first_name',
+            'last_name',
+            'picture',
+        ]),
+        'access_token': access_token,
+    }
+    response = requests.get(url, params)
+    response_dict = response.json()
+
+    facebook_user_id = response_dict['id']
+    first_name = response_dict['first_name']
+    last_name = response_dict['last_name']
+    url_img_profile = response_dict['picture']['data']['url']
+
+    user, user_created = User.objects.get_or_create(
+        username=facebook_user_id,
+        defaults={
+            'first_name': first_name,
+            'last_name': last_name,
+        },
+    )
+    login(request, user)
+
+    return redirect('index')
+
+
 # -
 # -
 # -

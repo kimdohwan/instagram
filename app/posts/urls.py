@@ -1,6 +1,7 @@
 from django.urls import path
 
 from . import views
+
 # from posts.views import post_list, post_detail
 
 app_name = 'posts'
@@ -11,6 +12,5 @@ urlpatterns = [
     path('create/', views.post_create, name='post-create'),
     path('delete/<int:pk>', views.post_delete, name='post-delete'),
     path('comment/<int:pk>', views.post_comment, name='post-comment'),
-
-    path('like/<int:pk>/', views.post_like_toggle, name='post-like-toggle'),
+    path('<int:post_pk>/comment/create', views.comment_create, name='comment-create'),
 ]

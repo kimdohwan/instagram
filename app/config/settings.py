@@ -29,6 +29,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# 페이스북 로그인 설정 developers.facebook.com에서 가져온다
+FACEBOOK_APP_ID = '492405001181867'
+FACEBOOK_APP_SECRET_CODE = '10519585f22211c4a3c762b8320973d2'
+
 # 커스텀 유져 모델
 AUTH_USER_MODEL = 'members.User'
 # login_required decorator에서 redirect_field_name에서 참조한다

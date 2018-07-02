@@ -9,4 +9,5 @@ urlpatterns = [
     path('signup/', views.signup, name='signup'),
     path('profile/<slug:author>', views.profile, name='profile'),
     path('withraw/<int:pk>', views.withraw, name='withraw'),
+    path('facebook-login/', views.facebook_login, name='facebook-login'),
 ]
