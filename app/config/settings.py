@@ -34,6 +34,9 @@ AUTH_USER_MODEL = 'members.User'
 # login_required decorator에서 redirect_field_name에서 참조한다
 LOGIN_URL = 'members:login'
 
+FACEBOOK_APP_ID = '631395940565915'
+FACEBOOK_APP_SECRET_CODE = '9732d98aa29ebf240ed1529fa05d06f9'
+
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),

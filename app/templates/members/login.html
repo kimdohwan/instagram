@@ -10,4 +10,14 @@
 
     </div>
 </form>
-{% endblock%}
+<div>
+    <!--페이스북 로그인 페이지로 보냄, 클라이언트 id와 리다이렉트 uri를 포함-->
+    <!--페이스북 다이얼로그로 auth요청을 보내는 과정이다.-->
+    <!--클라이언트 아이디는 내 앱으로 부터 요청을 보내는 것을 의미 -->
+    <!--리다이렉트는 로그인 후 돌아오는 페이지, request에 code를 받아서 돌아온다-->
+    <!--code는 view함수에서 진행됨 -->
+    <a href="https://www.facebook.com/v3.0/dialog/oauth?
+  client_id=631395940565915
+  &redirect_uri=http://localhost:8000/members/facebook-login/&scope=email,public_profile" class="btn btn-primary">페이스북 로그인</a>
+</div>
+{% endblock %}
