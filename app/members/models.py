@@ -1,9 +1,9 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-
-# Create your models here.
 from members.exceptions import RelationNotExist, DuplicateRelationException
+
+Post = 'posts.Post'
 
 
 class User(AbstractUser):
@@ -54,8 +54,6 @@ class User(AbstractUser):
                 to_user=to_user,
                 relation_type='Follow'
             )
-
-
 
     @property
     def following(self):

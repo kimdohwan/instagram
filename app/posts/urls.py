@@ -10,5 +10,7 @@ urlpatterns = [
     # path('posts', views.index),
     path('create/', views.post_create, name='post-create'),
     path('delete/<int:pk>', views.post_delete, name='post-delete'),
-    path('comment/<int:pk>', views.post_comment, name='post-comment')
+    path('comment/<int:pk>', views.post_comment, name='post-comment'),
+
+    path('like/<int:pk>/', views.post_like_toggle, name='post-like-toggle'),
 ]

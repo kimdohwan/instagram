@@ -82,7 +82,7 @@ def withraw(request, pk):
 
 
 def follow_toggle(request):
-    수업 진행 중 끝
+    # 수업 진행 중 끝
     pass
 
 
