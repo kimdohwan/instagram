@@ -92,61 +92,59 @@ def follow_toggle(request):
 
 
 def facebook_login(request):
+    def get_access_token(code):
+        url = 'https://graph.facebook.com/v3.0/oauth/access_token'
+        params = {
+            'client_id': settings.FACEBOOK_APP_ID,
+            'redirect_uri': 'http://localhost:8000/members/facebook-login/',
+            'client_secret': settings.FACEBOOK_APP_SECRET_CODE,
+            'code': code,
+        }
+        response = requests.get(url, params)
+
+        response_dict = response.json()
+        access_token = response_dict['access_token']
+        return access_token
+
+    def debug_token(token):
+        url = 'https://graph.facebook.com/debug_token'
+
+        params = {
+            'input_token': token,
+            'access_token': f'{settings.FACEBOOK_APP_ID}|{settings.FACEBOOK_APP_SECRET_CODE}',
+        }
+        response = requests.get(url, params)
+        return response.json()
+
+    def get_user_info(token, fields=('id', 'name', 'first_name', 'last_name', 'picture')):
+        url = 'https://graph.facebook.com/v3.0/me'
+        params = {
+            'fields': ','.join(fields),
+            'access_token': token,
+        }
+        response = requests.get(url, params)
+        return response.json()
+
+    def create_user_from_facebook_user_info(user_info):
+        facebook_user_id = user_info['id']
+        first_name = user_info['first_name']
+        last_name = user_info['last_name']
+        url_img_profile = user_info['picture']['data']['url']
+
+        return User.objects.get_or_create(
+            username=facebook_user_id,
+            defaults={
+                'first_name': first_name,
+                'last_name': last_name,
+            },
+        )
+
     code = request.GET.get('code')
-    url = 'https://graph.facebook.com/v3.0/oauth/access_token'
-    params = {
-        'client_id': settings.FACEBOOK_APP_ID,
-        'redirect_uri': 'http://localhost:8000/members/facebook-login/',
-        'client_secret': settings.FACEBOOK_APP_SECRET_CODE,
-        'code': code,
-    }
-    response = requests.get(url, params)
-    # response_dict = json.loads(response.text)
-    # 위와 같은 결과를 가지는 간략한 방법
-    response_dict = response.json()
-    access_token = response_dict['access_token']
-    # r = requests.get(
-    #     f'https://graph.facebook.com/v3.0/oauth/access_token?'
-    #     f'client_id={app_id}'
-    #     f'&redirect_uri={redirect_uri}'
-    #     f'&client_secret={app_secret}&code={code}')
-    url = 'https://graph.facebook.com/debug_token'
-    # app_id = '492405001181867'
-    # app_secret = '10519585f22211c4a3c762b8320973d2'
-    params = {
-        'input_token': access_token,
-        'access_token': f'{settings.FACEBOOK_APP_ID}|{settings.FACEBOOK_APP_SECRET_CODE}',
-    }
-    response = requests.get(url, params)
+    access_token = get_access_token(code)
+    user_info = get_user_info(access_token)
+    user, user_created = create_user_from_facebook_user_info(user_info)
 
-    url = 'https://graph.facebook.com/v3.0/me'
-    params = {
-        'fields': ','.join([
-            'id',
-            'name',
-            'first_name',
-            'last_name',
-            'picture',
-        ]),
-        'access_token': access_token,
-    }
-    response = requests.get(url, params)
-    response_dict = response.json()
-
-    facebook_user_id = response_dict['id']
-    first_name = response_dict['first_name']
-    last_name = response_dict['last_name']
-    url_img_profile = response_dict['picture']['data']['url']
-
-    user, user_created = User.objects.get_or_create(
-        username=facebook_user_id,
-        defaults={
-            'first_name': first_name,
-            'last_name': last_name,
-        },
-    )
     login(request, user)
-
     return redirect('index')
 
 
