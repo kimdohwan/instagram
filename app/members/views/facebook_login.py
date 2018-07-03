@@ -67,4 +67,4 @@ def facebook_login(request):
         return redirect('index')
     return redirect('members:login')
 
-    return redirect('index')
+
