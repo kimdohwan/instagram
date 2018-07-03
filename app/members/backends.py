@@ -12,7 +12,7 @@ class FacebookBackend:
         facebook의 authorization code가 주어졌을 때
         적절히 처리해서
         facebook의 user_id에 해당하는 User가 있으면
-        해당 User를 리턴
+        해당 User를 리턴d
         :param request:
         :param code:
         :return:
