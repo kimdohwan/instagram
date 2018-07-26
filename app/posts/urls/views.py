@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import views
+from .. import views
 
 # from posts.views import post_list, post_detail
 
@@ -10,7 +10,7 @@ urlpatterns = [
     path('<int:pk>/', views.post_detail, name='post-detail'),
     # path('posts', views.index),
     path('create/', views.post_create, name='post-create'),
-    path('delete/<int:pk>', views.post_delete, name='post-delete'),
-    path('comment/<int:pk>', views.post_comment, name='post-comment'),
-    path('<int:post_pk>/comment/create', views.comment_create, name='comment-create'),
+    path('delete/<int:pk>/', views.post_delete, name='post-delete'),
+    path('comment/<int:pk>/', views.post_comment, name='post-comment'),
+    path('<int:post_pk>/comment/create/', views.comment_create, name='comment-create'),
 ]

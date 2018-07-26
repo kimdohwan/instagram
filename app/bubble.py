@@ -9,6 +9,7 @@ def bubble_sort(list):
         for j in range(i):
             if list[j] > list[j + 1]:
                 list[j + 1], list[j] = list[j], list[j + 1]
+    return list
 
 
 def selection_sort(list):
@@ -36,4 +37,39 @@ def insertion_sort(list):
     return list
 
 
-print(selection_sort(numbers.copy()))
+def fibonacci(index):
+    if index < 2:
+        return index
+    return fibonacci(index - 1) + fibonacci(index - 2)
+
+
+def fibonacci_non_recursive(index):  # 반복문으로 피보나치 수열을 구해보자
+    if index < 2:
+        return index
+
+    value = 1
+    prev1 = 1
+    prev2 = 1
+
+    for i in range(index - 2):
+        value = prev1 + prev2
+        prev2 = prev1
+        prev1 = value
+
+    return value
+
+
+mem = [0] * 101  # index 번째 피보나치 수열 저장소
+
+
+def fibonacci_dynamic(index):  # 다이나믹 프로그래밍으로
+    if index < 2:
+        return index
+
+    # mem 리스트의 인덱스 : index - 2도 가능 - 1, 2번째 리스트는 그냥 리턴하기 때문에 저장안되기 때문에...
+
+    if mem[index]:  # 피보나치 수열을 이미 계산했다면...
+        return mem[index]
+    else:  # 계산한 피보나치 수열이 아니에요...
+        mem[index] = fibonacci_dynamic(index - 1) + fibonacci_dynamic(index - 2)  # 값 계산해서 리스트에 저장해놓고
+        return mem[index]  # 리턴하기

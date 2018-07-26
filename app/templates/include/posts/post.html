@@ -34,41 +34,41 @@
 <div>
     <img width="75%" src="{{ post.photo.url }}" alt="">
 </div>
-<!--<div>-->
-    <!--<div>-->
-        <!--{% for comment in comments %}-->
-        <!--<div>-->
-            <!--{% if post.id == comment.post_id %}-->
-            <!--<div>-->
-                <!-- -&#45;&#45; {{ comment.content }}-->
-                <!--<span>-->
-                <!--{% if comment.author.img_profile %}-->
-                <!--<img style="width: 40px;" class="rounded-circle" src="{{ comment.author.img_profile.url }}"-->
-                     <!--alt="">-->
-                <!--{% else %}-->
-                <!--{% load static %}-->
-                <!--<img style="width: 40px;" class="rounded-circle" src="{% static 'images/blank_user.png' %}"-->
-                     <!--alt="">-->
-                <!--{% endif %}-->
-            <!--</span>-->
-                <!--<a href="{% url 'members:profile' comment.author %}">{{ comment.author }}</a>-->
-                <!--{{ comment.created_at|time:"H:i" }} {{ comment.created_at|date:"D d m y" }}-->
-            <!--</div>-->
-            <!--{% endif %}-->
-        <!--</div>-->
-        <!--{% endfor %}-->
-    <!--</div>-->
-    <!--<div>-->
-        <!--<form action="{% url 'posts:post-comment' post.id %}" method="POST">-->
-            <!--{% csrf_token %}-->
-            <!--{% for field in form %}-->
-            <!--{{ field }}-->
-            <!--{% endfor %}-->
+<div>
+    <div>
+        {% for comment in comments %}
+        <div>
+            {% if post.id == comment.post_id %}
+            <div>
+                 --- {{ comment.content }}
+                <span>
+                {% if comment.author.img_profile %}
+                <img style="width: 40px;" class="rounded-circle" src="{{ comment.author.img_profile.url }}"
+                     alt="">
+                {% else %}
+                {% load static %}
+                <img style="width: 40px;" class="rounded-circle" src="{% static 'images/blank_user.png' %}"
+                     alt="">
+                {% endif %}
+            </span>
+                <a href="{% url 'members:profile' comment.author %}">{{ comment.author }}</a>
+                {{ comment.created_at|time:"H:i" }} {{ comment.created_at|date:"D d m y" }}
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    <div>
+        <form action="{% url 'posts:post-comment' post.id %}" method="POST">
+            {% csrf_token %}
+            {% for field in form %}
+            {{ field }}
+            {% endfor %}
 
-            <!--<button type="submit">댓글달기</button>-->
-        <!--</form>-->
-    <!--</div>-->
-<!--</div>-->
+            <button type="submit">댓글달기</button>
+        </form>
+    </div>
+</div>
 
 <div>
     {% for comment in post.comments.all %}
