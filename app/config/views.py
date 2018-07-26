@@ -5,7 +5,7 @@ def index(request):
     return redirect('posts:post-list')
 
 
-def link_api(request, api_type):
-    API_TYPE = ['posts', 'users']
-    if api_type in API_TYPE:
-        return redirect('apis:post-list')
+# def link_api(request, api_type):
+#     API_TYPE = ['posts', 'users']
+#     if api_type in API_TYPE:
+#         return redirect(f'{api_type}_apis:post-list')
