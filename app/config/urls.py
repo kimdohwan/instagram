@@ -11,6 +11,7 @@ urlpatterns = [
     path('posts/', include('posts.urls.views')),
     path('', views.index, name='index'),
     path('members/', include('members.urls.views')),
+
     path('api/', include([
         path('posts/', include('posts.urls.apis')),
         path('users/', include('members.urls.apis')),
