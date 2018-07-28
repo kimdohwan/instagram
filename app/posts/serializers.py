@@ -6,19 +6,27 @@ from .models import Post, PostComment
 
 User = get_user_model()
 
-
-class PostCommentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = PostComment
-        fields = (
-            'content',
-        )
+#
+# class PostCommentSerializer(serializers.ModelSerializer):
+#     postcomments = PostComment.objects.all()
+#     content = serializers.StringRelatedField(
+#         # queryset=postcomments,
+#         read_only=False,
+#         # many=True,
+#     )
+#
+#     class Meta:
+#         model = PostComment
+#         fields = (
+#             'content',
+#             'created_at',
+#         )
 
 
 class PostSerializer(serializers.ModelSerializer):
     author = UserSerializer()
     # photo = serializers.SerializerMethodField()
-    post_comments = PostCommentSerializer()
+    post_comments = serializers.SlugRelatedField(many=True, slug_field='content', read_only=True)
 
     class Meta:
         model = Post
