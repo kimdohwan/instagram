@@ -13,6 +13,8 @@ __all__ = (
 class PostList(APIView):
     def get(self, request):
         posts = Post.objects.all()
-        serializer = PostSerializer(posts, many=True)
+        serializer = PostSerializer(posts, many=True, context={"request": request})
+
+
         return Response(serializer.data)
 # return HttpResponse('ggg')

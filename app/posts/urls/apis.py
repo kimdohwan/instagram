@@ -1,10 +1,10 @@
 from django.urls import path
 
-from posts.apis import PostList
+from .. import apis
 from posts.apis.generic_cbv import PostList as GenericPostList
 
-app_name = 'posts_apis'
+# app_name = 'apis'
 urlpatterns = [
-    path('', PostList.as_view(), name='post-list'),
+    path('', apis.PostList.as_view(), name='post-list'),
     # path('generic-cbv/', GenericPostList.as_view(), name='generic-post-list' )
 ]

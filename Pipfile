@@ -10,6 +10,7 @@ ipython = "*"
 "psycopg2-binary" = "*"
 requests = "*"
 djangorestframework = "*"
+django-cors-headers = "*"
 
 [dev-packages]
 ipython = "*"

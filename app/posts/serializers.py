@@ -9,6 +9,7 @@ User = get_user_model()
 
 class PostSerializer(serializers.ModelSerializer):
     author = UserSerializer()
+    photo = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
@@ -20,3 +21,8 @@ class PostSerializer(serializers.ModelSerializer):
             'created_at',
             'like_users',
         )
+
+    def get_photo(self, post):
+        request = self.context.get('request')
+        photo_url = post.photo.url
+        return request.build_absolute_uri(photo_url)

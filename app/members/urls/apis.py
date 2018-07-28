@@ -1,8 +1,8 @@
 from django.urls import path
 
-from ..apis import UserList
+from .. import apis
 
-app_name = 'users_apis'
+# app_name = 'apis'
 urlpatterns = [
-    path('', UserList.as_view(), name='user-list'),
+    path('', apis.UserList.as_view(), name='user-list'),
 ]
