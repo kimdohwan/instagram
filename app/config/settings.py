@@ -80,6 +80,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
 
+    # cors 헤더에 포함시키는 것
     # corsheaders CommonMiddleware 위에 넣어줘서 동작해야한다
     'corsheaders.middleware.CorsMiddleware',
 
@@ -89,7 +90,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    # cors 헤더에 포함시키는 것
 
 ]
 

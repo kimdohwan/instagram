@@ -10,7 +10,7 @@ User = get_user_model()
 # class PostCommentSerializer(serializers.ModelSerializer):
 #     postcomments = PostComment.objects.all()
 #     content = serializers.StringRelatedField(
-#         # queryset=postcomments,
+#         queryset=postcomments,
 #         read_only=False,
 #         # many=True,
 #     )
